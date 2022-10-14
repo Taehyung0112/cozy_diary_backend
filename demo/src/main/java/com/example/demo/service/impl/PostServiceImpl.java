@@ -10,6 +10,7 @@ import com.example.demo.entity.Likes;
 import com.example.demo.entity.Post;
 import com.example.demo.entity.PostFile;
 import com.example.demo.exception.ProjectException;
+import com.example.demo.index.Indexer;
 import com.example.demo.service.PostService;
 import com.example.demo.vo.PostVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import org.springframework.data.domain.Pageable;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,6 +44,9 @@ public class PostServiceImpl  implements PostService {
     @Autowired
     private LikesDao likesDao;
 
+    private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("title","content");
+
+
     @Override
     public List<Post> getPostByUid(String uid) {
         return postDao.findPostByUid(uid);
@@ -55,8 +60,8 @@ public class PostServiceImpl  implements PostService {
 
     @Override
     public Optional<String> addPost(MultipartFile[] files,PostRequest postRequest) {
-        String basicUrl = "http://172.20.10.10:8080/staticFile/";
-//        String basicUrl = "http://140.131.114.166:80/staticFile/";
+//        String basicUrl = "http://172.20.10.10:8080/staticFile/";
+        String basicUrl = "http://140.131.114.166:80/staticFile/";
 
         try{
             Post post = new Post();
@@ -71,7 +76,6 @@ public class PostServiceImpl  implements PostService {
                 PostFile postFile = new PostFile();
                 postFile.setPostUrl(basicUrl+postRequest.getPost().getUid()+"/postFile/"+nextPid+"/"+files[i].getOriginalFilename());
                 pFile.add(postFile);
-                System.out.println("第"+i+"個"+pFile.get(i).getPostUrl());
             }
 
 
@@ -79,7 +83,7 @@ public class PostServiceImpl  implements PostService {
             post.setTitle(postRequest.getPost().getTitle());
             post.setCid(postRequest.getPost().getCid());
             post.setContent(postRequest.getPost().getContent());
-            post.setLikes(postRequest.getPost().getLikes());
+            post.setLikes(0);
             post.setCollects(postRequest.getPost().getCollects());
             post.setPost_time(LocalDateTime.now().toString());
             post.setCover(basicUrl+postRequest.getPost().getUid()+"/postFile/"+nextPid+"/"+postRequest.getPost().getCover());
@@ -87,6 +91,7 @@ public class PostServiceImpl  implements PostService {
             post.setComments(postRequest.getPost().getComments());
             post.setPostLng(postRequest.getPost().getPostLng());
             post.setPostLat(postRequest.getPost().getPostLat());
+
             postDao.save(post);
             return Optional.of(post.getPid().toString());
         }catch (Exception e){
@@ -131,5 +136,28 @@ public class PostServiceImpl  implements PostService {
     @Override
     public List<PostResponse> getPostCoverForPersonalPageByUid(String uid) {
         return postDao.findPostCoverForPersonalPageByUid(uid);
+    }
+
+    @Override
+    public List<Post> getAllPostByIDPaging(Pageable pageable) {
+        return postDao.findPostByIdPaging(pageable);
+    }
+
+    @Override
+    public List<PostResponse> getPostCoverByCategory(Integer cid) {
+        return postDao.findPostCoverByCategory(cid);
+    }
+
+    @Override
+    public List<Post> searchPost(String text, List<String> fields, int limit) {
+        List<String> fieldsToSearchBy = fields.isEmpty() ? SEARCHABLE_FIELDS : fields;
+
+        boolean containsInvalidField = fieldsToSearchBy.stream(). anyMatch(f -> !SEARCHABLE_FIELDS.contains(f));
+
+        if(containsInvalidField) {
+            throw new IllegalArgumentException();
+        }
+        return postDao.searchBy(text, limit, fieldsToSearchBy.toArray(new String[0]));
+
     }
 }

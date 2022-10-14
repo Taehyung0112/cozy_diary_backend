@@ -20,13 +20,15 @@ public class PostResponse {
     private String title;
     private String pic;
     private String username;
+    private String uid;
 
-    public PostResponse(Integer pid , String cover, Integer likes , String title , String pic, String username) {
+    public PostResponse(Integer pid , String cover, Integer likes , String title , String pic, String username, String uid) {
         this.pid = pid;
         this.likes = likes;
         this.cover = cover;
         this.title = title;
         this.pic = pic;
         this.username = username;
+        this.uid = uid;
     }
 }

@@ -1,19 +1,25 @@
 package com.example.demo.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Indexed
 @Getter
 @Setter
 @ToString
 @Entity
 @Table(name = "post")
+@EqualsAndHashCode
 public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +28,12 @@ public class Post implements Serializable {
     @Column(name = "uid")
     private String uid;
 
+    @FullTextField()
+    @NaturalId()
     @Column(name = "title")
     private String title;
 
+    @FullTextField()
     @Column(name = "content",nullable = true)
     private String content;
 

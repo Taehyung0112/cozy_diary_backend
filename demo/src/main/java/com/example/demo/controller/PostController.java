@@ -3,14 +3,16 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
+import com.example.demo.dto.SearchRequestDTO;
 import com.example.demo.entity.Post;
 import com.example.demo.service.FileStorageService;
 import com.example.demo.service.PostService;
 import com.example.demo.util.JsonResponse;
-import com.example.demo.vo.PostVO;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -50,7 +52,7 @@ public class PostController {
     }
 
     @CrossOrigin(origins = "http://172.20.10.10:8080")
-    @RequestMapping(value = "/getPostCover", method = RequestMethod.GET)
+    @RequestMapping(value = "/getPostCoverByUserCategory", method = RequestMethod.GET) //此功能是根據使用者追蹤的主題類別去抓貼文列表(只抓封面跟重點資訊
     public ResponseEntity<Object> getPostCoverByUid(@RequestParam String uid){
         try{
             List<PostResponse> post = postService.getPostCoverByUid(uid);
@@ -61,7 +63,7 @@ public class PostController {
     }
 
     @CrossOrigin(origins = "http://172.20.10.10:8080")
-    @RequestMapping(value = "/getPost", method = RequestMethod.GET)
+    @RequestMapping(value = "/getPostByUid", method = RequestMethod.GET)//此功能是抓取該使用者發過的貼文
     public ResponseEntity<Object> getPostByUid(@RequestParam String uid){
         try{
             List<Post> post = postService.getPostByUid(uid);
@@ -73,7 +75,7 @@ public class PostController {
     }
 
     @CrossOrigin(origins = "http://172.20.10.10:8080")
-    @RequestMapping(value = "/getPostDetail", method = RequestMethod.GET)
+    @RequestMapping(value = "/getPostDetail", method = RequestMethod.GET)//點進選貼文後根據貼文id再抓詳細資料
     public ResponseEntity<Object> getPostDetailByPid(@RequestParam Integer pid){
         try{
             Post post = postService.getPostDetail(pid);
@@ -106,5 +108,39 @@ public class PostController {
             System.out.println(e);
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
+    }
+
+    @CrossOrigin(origins = "http://172.20.10.10:8080")
+    @RequestMapping(value = "/getPostCoverByCategory", method = RequestMethod.GET) //此功能是根據使用者追蹤的主題類別去抓貼文列表(只抓封面跟重點資訊
+    public ResponseEntity<Object> getPostCoverByCategory(@RequestParam Integer cid){
+        try{
+            List<PostResponse> post = postService.getPostCoverByCategory(cid);
+            return JsonResponse.generateResponse("獲取用戶貼文成功", HttpStatus.OK, post);
+        }catch (Exception e){
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:10001")
+    @RequestMapping(value = "/getAllPost", method = RequestMethod.GET)
+    public  ResponseEntity<Object> getAllPost(@RequestParam Integer page, @RequestParam Integer rows){
+        try {
+            Pageable pageable = PageRequest.of(page, rows, Sort.by("id"));
+            return JsonResponse.generateResponse("獲取用戶貼文成功", HttpStatus.OK, postService.getAllPostByIDPaging(pageable));
+        }catch (Exception e){
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+
+    }
+    @CrossOrigin(origins = "http://localhost:10001")
+    @RequestMapping(value = "/searchPost", method = RequestMethod.GET)
+    public  ResponseEntity<Object> getAllPost(SearchRequestDTO searchRequestDTO){
+        try {
+            List<Post> post = postService.searchPost(searchRequestDTO.getText(), searchRequestDTO.getFields(), searchRequestDTO.getLimit());
+            return JsonResponse.generateResponse("獲取用戶貼文成功", HttpStatus.OK, post);
+        }catch (Exception e){
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+
     }
 }
