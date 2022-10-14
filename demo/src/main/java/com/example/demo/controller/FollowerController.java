@@ -21,7 +21,7 @@ public class FollowerController {
     @Autowired
     private FollowerService followerService;
 
-    @RequestMapping(value = "/addFolower", method = RequestMethod.POST)
+    @RequestMapping(value = "/addFollower", method = RequestMethod.POST)
     public ResponseEntity<?> addFollower(@RequestBody FollowerVO followerVO){
         try{
             Optional<String> optional = followerService.addFollower(followerVO);
@@ -32,12 +32,22 @@ public class FollowerController {
     }
 
     @RequestMapping(value = "/followList", method = RequestMethod.GET)
-    public ResponseEntity<Object> getFollowList(@RequestParam String follower1){
+    public ResponseEntity<Object> getFollowList(@RequestParam String uid){
         try {
-            List<Follower> followerList = followerService.findAllByFollwer1(follower1);
+            List<Follower> followerList = followerService.findAllByFollwer1(uid);
             return JsonResponse.generateResponse("查詢追蹤名單成功",HttpStatus.OK,followerList);
         }catch (Exception e){
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
     }
+
+    @CrossOrigin(origins = "http://localhost:10001")
+    @RequestMapping(value = "/deleteFollower", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteFollower(@RequestParam Integer fid){
+        try{
+            Optional<String> optional = followerService.deleteFollower(fid);
+            return ResponseEntity.ok().body(optional);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }    }
 }

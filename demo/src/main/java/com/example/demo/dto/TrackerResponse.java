@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @ToString
@@ -15,15 +17,15 @@ public class TrackerResponse {
     private String tracker1;
     private String tracker2;
     private String name;
-    private String email;
-    private String trackTime;
+    private LocalDateTime trackTime;
+    private String pic;
 
-    public TrackerResponse(String tracker1,String tracker2,String name,String email,String trackTime){
+    public TrackerResponse(String tracker1,String tracker2,String name,LocalDateTime trackTime, String pic){
         this.tracker1 = tracker1;
         this.tracker2 = tracker2;
         this.name = name;
-        this.email = email;
         this.trackTime = trackTime;
+        this.pic = pic;
     }
 
 }

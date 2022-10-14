@@ -12,6 +12,6 @@ public interface FollowerService {
 
     public Optional<String> addFollower(FollowerVO followerVO);
 
-    public Optional<String> deleteFollower(String follower1 , String follower2);
+    public Optional<String> deleteFollower(Integer fid);
 
 }

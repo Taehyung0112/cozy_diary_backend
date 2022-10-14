@@ -15,6 +15,8 @@ public interface FollowerDao extends JpaRepository<Follower,Integer> {
 
     public List<Follower> findAllByFollower1(String follower1);
 
+
+
     @Transactional
     @Modifying
     @Query("delete from Follower f where f.follower1=:follower1 and f.follower2=:follower2")

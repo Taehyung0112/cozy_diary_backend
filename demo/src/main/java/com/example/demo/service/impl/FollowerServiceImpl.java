@@ -38,9 +38,10 @@ public class FollowerServiceImpl implements FollowerService {
     }
 
     @Override
-    public Optional<String> deleteFollower(String follower1, String follower2) {
+    public Optional<String> deleteFollower(Integer fid) {
+        Follower follower = followerDao.getById(fid);
         try {
-            followerDao.deleteFollowerById(follower1,follower2);
+            followerDao.delete(follower);
             return Optional.of("刪除粉絲成功");
         }catch (Exception e){
             return Optional.of("刪除粉絲發生以下錯誤："+e);
