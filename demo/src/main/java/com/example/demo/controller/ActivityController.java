@@ -42,7 +42,7 @@ public class ActivityController {
         try {
             ActivityRequest activityRequest = new ActivityRequest();
             activityRequest = objectMapper.readValue(jsonData, ActivityRequest.class);
-            Optional<String> optional = activityService.addActivity(activityRequest);
+            Optional<String> optional = activityService.addActivity(file,activityRequest);
             try {
                 storageService.saveActivity(file,optional.get(),activityRequest.getActivity().getHolder());
             }catch (Exception e){
@@ -56,10 +56,21 @@ public class ActivityController {
     }
 
     @CrossOrigin(origins = "http://172.20.10.10:8080")
-    @RequestMapping(value = "/getActivityCover", method = RequestMethod.GET)
-    public ResponseEntity<Object> getPostCoverByUid(@RequestParam Integer acid){
+    @RequestMapping(value = "/getActivityCoverByCategory", method = RequestMethod.GET)
+    public ResponseEntity<Object> getActivityCoverByCategory(@RequestParam Integer acid){
         try{
             List<ActivityCoverResponse> activityCoverResponses = activityService.getActivityCoverByCategory(acid);
+            return JsonResponse.generateResponse("獲取用戶活動成功", HttpStatus.OK, activityCoverResponses);
+        }catch (Exception e){
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://172.20.10.10:8080")
+    @RequestMapping(value = "/getActivityCover", method = RequestMethod.GET)
+    public ResponseEntity<Object> getActivityCover(@RequestParam String option){
+        try{
+            List<ActivityCoverResponse> activityCoverResponses = activityService.getActivityListOrderByActivityTime(option);
             return JsonResponse.generateResponse("獲取用戶活動成功", HttpStatus.OK, activityCoverResponses);
         }catch (Exception e){
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
