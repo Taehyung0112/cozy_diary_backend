@@ -2,12 +2,14 @@ package com.example.demo.dao;
 
 import com.example.demo.dto.FollowerResponse;
 import com.example.demo.dto.TrackerResponse;
+import com.example.demo.entity.Comments;
 import com.example.demo.entity.Follower;
 import com.example.demo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
