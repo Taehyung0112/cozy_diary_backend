@@ -12,10 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Entity
-@IdClass(LikesPK.class)
-@Table(name = "likes")
-
-public class Likes implements Serializable{
+@IdClass(CollectsPK.class)
+@Table(name = "collects")
+public class Collects implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -26,9 +25,7 @@ public class Likes implements Serializable{
     @Column(name = "uid")
     private String uid;
 
-    @Column(name = "like_time")
-    private String like_time;
+    @Column(name = "collect_time")
+    private String collectTime;
 
-    @Column(name = "type")
-    private Integer type;
 }

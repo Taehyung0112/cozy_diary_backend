@@ -5,11 +5,11 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class LikesPK implements Serializable{
+
+public class CollectsPK implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer pid;
 
     private String uid;
-
 }

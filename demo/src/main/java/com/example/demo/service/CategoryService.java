@@ -12,4 +12,6 @@ public interface CategoryService {
 
     public Optional<String> addCategory(CategoryVO categoryVO);
 
+    public List<Category> getCategoryList();
+
 }

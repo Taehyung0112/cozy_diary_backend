@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.LikesResponse;
 import com.example.demo.entity.Likes;
 import com.example.demo.vo.LikesVO;
 
@@ -8,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LikesService {
-    public List<Likes> getLikesListByPid(Integer pid);
+    public List<LikesResponse> getLikesListByPidAndType(Integer pid , Integer type);
 
-    public Optional<String> addLikes(LikesVO likesVO);
-
-    public Optional<String> deleteLikes(LikesVO likesVO);
+//    public Optional<String> addLikes(LikesVO likesVO);
+//
+//    public Optional<String> deleteLikes(LikesVO likesVO);
 }

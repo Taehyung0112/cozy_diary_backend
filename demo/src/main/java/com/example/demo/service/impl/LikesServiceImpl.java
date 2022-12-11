@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 
 import com.example.demo.dao.LikesDao;
+import com.example.demo.dto.LikesResponse;
 import com.example.demo.entity.Likes;
 import com.example.demo.service.LikesService;
 import com.example.demo.vo.LikesVO;
@@ -18,35 +19,35 @@ public class LikesServiceImpl  implements LikesService {
     private LikesDao likesDao;
 
     @Override
-    public List<Likes> getLikesListByPid(Integer pid) {
-        return likesDao.getLikesListByPid(pid);
+    public List<LikesResponse> getLikesListByPidAndType(Integer pid , Integer type) {
+        return likesDao.getLikesListByPidAndType(pid ,type );
     }
 
-    @Override
-    public Optional<String> addLikes(LikesVO likesVO) {
-        try {
-            Likes likes = new Likes();
-            likes.setPid(likesVO.getPid());
-            likes.setUid(likesVO.getUid());
-            likes.setLikeTime(LocalDateTime.now());
-            likesDao.save(likes);
-            return Optional.of("新增按讚資料成功");
-        }catch (Exception e){
-            return Optional.of("新增按讚資料時發生以下錯誤："+e.toString());
-        }
-    }
-
-    @Override
-    public Optional<String> deleteLikes(LikesVO likesVO) {
-        try {
-            Likes likes = new Likes();
-            likes.setPid(likesVO.getPid());
-            likes.setUid(likesVO.getUid());
-            likes.setLikeTime(LocalDateTime.now());
-            likesDao.delete(likes);
-            return Optional.of("刪除按讚資料成功");
-        }catch (Exception e){
-            return Optional.of("刪除按讚資料時發生以下錯誤："+e.toString());
-        }
-    }
+//    @Override
+//    public Optional<String> addLikes(LikesVO likesVO) {
+//        try {
+//            Likes likes = new Likes();
+//            likes.setPid(likesVO.getPid());
+//            likes.setUid(likesVO.getUid());
+//            likes.setLikeTime(LocalDateTime.now().toString());
+//            likesDao.save(likes);
+//            return Optional.of("新增按讚資料成功");
+//        }catch (Exception e){
+//            return Optional.of("新增按讚資料時發生以下錯誤："+e.toString());
+//        }
+//    }
+//
+//    @Override
+//    public Optional<String> deleteLikes(LikesVO likesVO) {
+//        try {
+//            Likes likes = new Likes();
+//            likes.setPid(likesVO.getPid());
+//            likes.setUid(likesVO.getUid());
+//            likes.setLikeTime(LocalDateTime.now());
+//            likesDao.delete(likes);
+//            return Optional.of("刪除按讚資料成功");
+//        }catch (Exception e){
+//            return Optional.of("刪除按讚資料時發生以下錯誤："+e.toString());
+//        }
+//    }
 }

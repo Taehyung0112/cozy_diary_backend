@@ -31,4 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
             return Optional.of("新增貼文類別時發生以下錯誤："+e.toString());
         }
     }
+
+    @Override
+    public List<Category> getCategoryList() {
+        return categoryDao.findAll();
+    }
 }

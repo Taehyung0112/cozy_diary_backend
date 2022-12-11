@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.LikesResponse;
 import com.example.demo.entity.Likes;
 import com.example.demo.service.LikesService;
 import com.example.demo.util.JsonResponse;
@@ -22,33 +23,24 @@ public class LikesController {
     @Autowired
     private LikesService likesService;
 
-    @RequestMapping(value = "/addLikes", method = RequestMethod.POST)
-    public ResponseEntity<?> addLikes(@RequestBody LikesVO likesVO){
-        try{
-            Optional<String> optional = likesService.addLikes(likesVO);
-            return JsonResponse.generateResponse(optional.get(), HttpStatus.OK, "");
-        }catch (Exception e){
-            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
-        }
-    }
-
-    @RequestMapping(value = "/likesList", method = RequestMethod.GET)
-    public ResponseEntity<Object> getLikesList(@RequestParam Integer pid){
+    @RequestMapping(value = "/postLikesList", method = RequestMethod.GET)
+    public ResponseEntity<Object> getPostLikesList(@RequestParam Integer pid){
         try {
-            List<Likes> likesList = likesService.getLikesListByPid(pid);
+            List<LikesResponse> likesList = likesService.getLikesListByPidAndType(pid,0);
             return JsonResponse.generateResponse("查詢貼文按讚列表成功",HttpStatus.OK,likesList);
         }catch (Exception e){
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
     }
 
-    @RequestMapping(value = "/deleteLikes", method = RequestMethod.POST)
-    public  ResponseEntity<?> deleteLikes(@RequestBody LikesVO likesVO){
+    @RequestMapping(value = "/activityLikesList", method = RequestMethod.GET)
+    public ResponseEntity<Object> getActivityLikesList(@RequestParam Integer aid){
         try {
-            Optional<String> optional = likesService.deleteLikes(likesVO);
-            return JsonResponse.generateResponse(optional.get(), HttpStatus.OK, "");
+            List<LikesResponse> likesList = likesService.getLikesListByPidAndType(aid,1);
+            return JsonResponse.generateResponse("查詢貼文按讚列表成功",HttpStatus.OK,likesList);
         }catch (Exception e){
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
     }
+
 }
