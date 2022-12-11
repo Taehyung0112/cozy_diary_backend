@@ -32,5 +32,5 @@ public class Participant {
     private String reason;
 
     @Column(name = "release_time")
-    private LocalDateTime releaseTime;
+    private String releaseTime;
 }
