@@ -55,6 +55,9 @@ public class Activity {
     @Column(name = "likes")
     private Integer likes;
 
+    @Column(name = "participants")
+    private Integer participants;
+
     @Column(name = "act_id")
     private Integer actId;
 
@@ -64,5 +67,5 @@ public class Activity {
 
     @OneToMany(targetEntity = Participant.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "aid", referencedColumnName = "aid")
-    private List<Participant> participants;
+    private List<Participant> participant;
 }

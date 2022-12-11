@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class ActivityCoverResponse {
+    private Integer aid;
     private Integer likes;
     private String cover;
     private String activityName;
@@ -23,7 +24,8 @@ public class ActivityCoverResponse {
     private Double placeLng;
     private Double placeLat;
 
-    public ActivityCoverResponse(String cover ,Integer likes, String activityName, String pic, String username,LocalDateTime activityTime, Double placeLng ,Double placeLat){
+    public ActivityCoverResponse(Integer aid,String cover ,Integer likes, String activityName, String pic, String username,LocalDateTime activityTime, Double placeLng ,Double placeLat){
+        this.aid = aid;
         this.likes = likes;
         this.cover = cover;
         this.activityName = activityName;
