@@ -21,4 +21,9 @@ public interface TrackerDao extends JpaRepository<Tracker,Integer> {
     @Query(value = "SELECT new com.example.demo.dto.TrackerResponse(t.tracker1 as tracker1, t.tracker2 as tracker2, u.name as name , t.trackTime as trackTime , u.pic as pic) FROM Tracker t INNER JOIN User u on t.tracker1 = u.googleId WHERE t.tracker2 = :tracker2 ORDER BY t.trackTime DESC")
     public List<TrackerResponse> findFollowerByTracker2(@Param("tracker2") String tracker2);
 
+
+    @Query(value = "SELECT t FROM Tracker t where t.tracker1 = :tracker1 and t.tracker2 = :tracker2")
+    public Tracker findTrackerByTracker(String tracker1 , String tracker2);
+
+
 }

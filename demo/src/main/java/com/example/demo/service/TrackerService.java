@@ -11,8 +11,6 @@ public interface TrackerService  {
 
     public Optional<String> addTracker(TrackerVO trackerVO);
 
-    public Optional<String> deleteTrack(Integer tid);
-
     public List<TrackerResponse> getTrackerListByGoogleId(String uid);
 
     public List<TrackerResponse> getFollowerListByGoogleId(String uid);

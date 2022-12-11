@@ -22,28 +22,24 @@ public class TrackerServiceImpl implements TrackerService{
     @Override
     public Optional<String> addTracker(TrackerVO trackerVO){
         try{
-            Tracker tracker = new Tracker();
-            tracker.setTracker1(trackerVO.getTracker1());
-            tracker.setTracker2(trackerVO.getTracker2());
-            tracker.setTrackTime(LocalDateTime.now());
-            trackerDao.save(tracker);
-
-            return Optional.of("新增追蹤成功");
+            Tracker trackerExist = trackerDao.findTrackerByTracker(trackerVO.getTracker1(), trackerVO.getTracker2());
+            if(trackerExist != null){
+                trackerDao.delete(trackerExist);
+                return Optional.of("刪除追蹤成功");
+            }
+            else{
+                Tracker tracker = new Tracker();
+                tracker.setTracker1(trackerVO.getTracker1());
+                tracker.setTracker2(trackerVO.getTracker2());
+                tracker.setTrackTime(LocalDateTime.now());
+                trackerDao.save(tracker);
+                return Optional.of("新增追蹤成功");
+            }
         }catch (Exception e){
-            return Optional.of("新增追蹤發生以下錯誤："+e);
+            return Optional.of("新增或刪除追蹤發生以下錯誤："+e);
         }
     }
 
-    @Override
-    public Optional<String> deleteTrack(Integer tid) {
-        Tracker tracker = trackerDao.getById(tid);
-        try{
-            trackerDao.delete(tracker);
-            return Optional.of("刪除追蹤成功");
-        }catch (Exception e){
-            return Optional.of("刪除追蹤發生以下錯誤："+e);
-        }
-    }
 
     @Override
     public List<TrackerResponse> getTrackerListByGoogleId(String uid) {

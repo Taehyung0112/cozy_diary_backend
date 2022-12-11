@@ -32,16 +32,6 @@ public class TrackerController {
         }    }
 
     @CrossOrigin(origins = "http://localhost:10001")
-    @RequestMapping(value = "/deleteTracker", method = RequestMethod.POST)
-    public ResponseEntity<?> deleteTracker(@RequestParam Integer tid){
-        try{
-            Optional<String> optional = trackerService.deleteTrack(tid);
-            return ResponseEntity.ok().body(optional);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }    }
-
-    @CrossOrigin(origins = "http://localhost:10001")
     @RequestMapping(value = "/getTrackerList", method = RequestMethod.GET)
     public ResponseEntity<Object> getTrackerList(@RequestParam String uid){
         try{
