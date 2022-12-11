@@ -29,5 +29,27 @@ public class RepliesCommentController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:10001")
+    @RequestMapping(value = "/deleteRepliesComment", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteRepliesComment(@RequestParam Integer rid){
+        try {
+            Optional<String> optional = repliesCommentService.deleteRepliesComment(rid);
+            return JsonResponse.generateResponse(optional.get(), HttpStatus.OK,"");
+        }catch (Exception e){
+            System.out.println(e);
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+    }
 
+    @CrossOrigin(origins = "http://localhost:10001")
+    @RequestMapping(value = "/updateRepliesComment", method = RequestMethod.POST)
+    public ResponseEntity<?> updateComment(@RequestParam Integer rid, @RequestParam String text){
+        try {
+            Optional<String> optional = repliesCommentService.updateRepliesComment(rid, text);
+            return JsonResponse.generateResponse(optional.get(), HttpStatus.OK,"");
+        }catch (Exception e){
+            System.out.println(e);
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,4 +32,10 @@ public class RepliesComments implements Serializable {
 
     @Column(name = "comment_id")
     private Integer commentId;
+
+    @Formula("(select u.name from user u where u.google_id = uid)")
+    private String username;
+
+    @Formula("(select u.pic_resize from user u where u.google_id = uid)")
+    private String pic;
 }

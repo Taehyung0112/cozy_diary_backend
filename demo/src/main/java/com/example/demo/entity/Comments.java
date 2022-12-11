@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,8 +34,15 @@ public class Comments implements Serializable {
     @Column(name = "pid")
     private Integer pid;
 
+    @Formula("(select u.name from user u where u.google_id = uid)")
+    private String username;
+
+    @Formula("(select u.pic_resize from user u where u.google_id = uid)")
+    private String pic;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "comment_id")
     private List<RepliesComments> repliesComments;
+
 
 }
