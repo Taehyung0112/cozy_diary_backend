@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 import javax.persistence.*;
 
+import com.example.demo.dto.TrackerResponse;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -51,14 +53,16 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "pic_resize")
+    private String picResize;
 
     @OneToMany(targetEntity = Tracker.class,cascade = CascadeType.ALL)
     @JoinColumn(name ="tracker1",referencedColumnName = "google_id")
-    private List<Tracker> tracker;
+    private List<TrackerResponse> tracker;
 
-    @OneToMany(targetEntity = Follower.class,cascade =  CascadeType.ALL)
-    @JoinColumn(name = "follower1" , referencedColumnName = "google_id")
-    private List<Follower> follower;
+    @OneToMany(targetEntity = Tracker.class,cascade =  CascadeType.ALL)
+    @JoinColumn(name = "tracker2" , referencedColumnName = "google_id")
+    private List<TrackerResponse> follower;
 
     @OneToMany(targetEntity = UserCategory.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "uid" , referencedColumnName = "google_id")

@@ -7,6 +7,7 @@ import com.example.demo.entity.User;
 import com.example.demo.service.FileStorageService;
 import com.example.demo.service.UserService;
 import com.example.demo.util.JsonResponse;
+import com.example.demo.vo.UserUpdateVO;
 import com.example.demo.vo.UserVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -53,6 +54,23 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "http://172.20.10.8:8080")
+    @RequestMapping(value = "/changeProfilePic", method = RequestMethod.POST)
+    public ResponseEntity<?> changeProfilePic(@RequestParam(required=true, value="file") MultipartFile file, @RequestParam String uid ,  @RequestParam String fileName) {
+        try {
+            Optional<String> optional = userService.changeProfilePic(uid,fileName);
+            try {
+                storageService.saveProfile(file,uid);
+            }catch (Exception e){
+                return JsonResponse.generateResponse(optional.get(), HttpStatus.OK, "file upload error:"+e);
+
+            }
+            return JsonResponse.generateResponse(optional.get(), HttpStatus.OK, "");
+        } catch (Exception e) {
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://172.20.10.8:8080")
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
     public ResponseEntity<Object> getUserByGid(@RequestParam String gid) {
         try {
@@ -65,9 +83,9 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:10001")
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-    public ResponseEntity<?> updateUser(@RequestBody UserVO userVO) {
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateVO userUpdateVO) {
         try {
-            Optional<String> optional = userService.updateUser(userVO);
+            Optional<String> optional = userService.updateUser(userUpdateVO);
             return JsonResponse.generateResponse(optional.get(), HttpStatus.OK, "");
         } catch (Exception e) {
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
