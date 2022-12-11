@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.CategoryResponse;
+import com.example.demo.dto.UserCategoryRequest;
 import com.example.demo.entity.UserCategory;
 import com.example.demo.service.UserCategoryService;
 import com.example.demo.util.JsonResponse;
@@ -23,9 +25,9 @@ public class UserCategoryController {
     private UserCategoryService userCategoryService;
 
     @RequestMapping(value = "/addUserCategory", method = RequestMethod.POST)
-    public ResponseEntity<?> addUserCategory(@RequestBody UserCategoryVO userCategoryVO){
+    public ResponseEntity<?> addUserCategory(@RequestBody UserCategoryRequest userCategoryRequest){
         try{
-            Optional<String> optional = userCategoryService.addUserCategory(userCategoryVO);
+            Optional<String> optional = userCategoryService.addUserCategory(userCategoryRequest);
             return JsonResponse.generateResponse(optional.get(), HttpStatus.OK, "");
         }catch (Exception e){
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
@@ -35,8 +37,18 @@ public class UserCategoryController {
     @RequestMapping(value = "/userCategoryList", method = RequestMethod.GET)
     public ResponseEntity<Object> getUserCategoryList(@RequestParam String uid){
         try{
-            List<UserCategory> userCategoryList = userCategoryService.getUserCategoryListByUid(uid);
+            List<CategoryResponse> userCategoryList = userCategoryService.getUserCategoryListByUid(uid);
             return JsonResponse.generateResponse("查詢使用者喜好類別成功",HttpStatus.OK,userCategoryList);
+        }catch (Exception e){
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+    }
+
+    @RequestMapping(value = "/deleteUserCategory", method = RequestMethod.POST)
+    public ResponseEntity<Object> deleteUserCategory(@RequestParam String uid){
+        try{
+            Optional <String> userCategoryList = userCategoryService.deleteUserCategory(uid);
+            return JsonResponse.generateResponse("刪除使用者喜好類別成功",HttpStatus.OK,userCategoryList);
         }catch (Exception e){
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
