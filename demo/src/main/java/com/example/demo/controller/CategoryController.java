@@ -31,10 +31,20 @@ public class CategoryController {
         }
     }
 
-    @RequestMapping(value = "/categoryList", method = RequestMethod.GET)
-    public ResponseEntity<Object> getCategoryList(@RequestParam Integer cid){
+    @RequestMapping(value = "/getCategory", method = RequestMethod.GET)
+    public ResponseEntity<Object> getCategory(@RequestParam Integer cid){
         try {
             List<Category> categoryList = categoryService.getCategoryById(cid);
+            return JsonResponse.generateResponse("查詢貼文類別成功",HttpStatus.OK,categoryList);
+        }catch (Exception e){
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+    }
+
+    @RequestMapping(value = "/getCategoryList", method = RequestMethod.GET)
+    public ResponseEntity<Object> getAllCategoryList(){
+        try {
+            List<Category> categoryList = categoryService.getCategoryList();
             return JsonResponse.generateResponse("查詢貼文類別成功",HttpStatus.OK,categoryList);
         }catch (Exception e){
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
