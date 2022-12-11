@@ -19,6 +19,9 @@ public class PostFile implements Serializable {
     private Integer fid;
 
 
+    @Column(name = "pid")
+    private Integer pid;
+
     @Column(name = "post_url")
     private String postUrl;
 

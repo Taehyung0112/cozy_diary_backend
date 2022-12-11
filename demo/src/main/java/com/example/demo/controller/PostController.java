@@ -8,6 +8,7 @@ import com.example.demo.entity.Post;
 import com.example.demo.service.FileStorageService;
 import com.example.demo.service.PostService;
 import com.example.demo.util.JsonResponse;
+import com.example.demo.vo.PostUpdateVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -39,11 +40,11 @@ public class PostController {
             PostRequest postRequest = new PostRequest();
             postRequest = objectMapper.readValue(jsonData, PostRequest.class);
             Optional<String> optional = postService.addPost(file,postRequest);
-            try {
-                storageService.savePost(file,optional.get(),postRequest.getPost().getUid());
-            }catch (Exception e){
-                System.out.println("file upload error:"+e);
-            }
+//            try {
+//                storageService.savePost(file,optional.get(),postRequest.getPost().getUid());
+//            }catch (Exception e){
+//                System.out.println("file upload error:"+e);
+//            }
             return JsonResponse.generateResponse(optional.get(), HttpStatus.OK,"");
         }catch (Exception e){
             System.out.println(e);
@@ -56,6 +57,28 @@ public class PostController {
     public ResponseEntity<Object> getPostCoverByUid(@RequestParam String uid){
         try{
             List<PostResponse> post = postService.getPostCoverByUid(uid);
+            return JsonResponse.generateResponse("獲取用戶貼文成功", HttpStatus.OK, post);
+        }catch (Exception e){
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://172.20.10.10:8080")
+    @RequestMapping(value = "/getPostCoverForLiked", method = RequestMethod.GET) //此功能是根據使用者追蹤的主題類別去抓貼文列表(只抓封面跟重點資訊
+    public ResponseEntity<Object> getPostCoverForLiked(@RequestParam String uid){
+        try{
+            List<PostResponse> post = postService.getPostCoverForLiked(uid);
+            return JsonResponse.generateResponse("獲取用戶貼文成功", HttpStatus.OK, post);
+        }catch (Exception e){
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://172.20.10.10:8080")
+    @RequestMapping(value = "/getPostCoverForCollected", method = RequestMethod.GET) //此功能是根據使用者追蹤的主題類別去抓貼文列表(只抓封面跟重點資訊
+    public ResponseEntity<Object> getPostCoverForCollected(@RequestParam String uid){
+        try{
+            List<PostResponse> post = postService.getPostCoverForCollected(uid);
             return JsonResponse.generateResponse("獲取用戶貼文成功", HttpStatus.OK, post);
         }catch (Exception e){
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
@@ -99,10 +122,34 @@ public class PostController {
     }
 
     @CrossOrigin(origins = "http://localhost:10001")
-    @RequestMapping(value = "/updateLikes", method = RequestMethod.POST)
+    @RequestMapping(value = "/updatePost", method = RequestMethod.POST)
+    public ResponseEntity<?> updatePost(@RequestBody PostUpdateVO postUpdateVO){
+        try {
+            Optional<String> optional = postService.updatePost(postUpdateVO);
+            return JsonResponse.generateResponse(optional.get(), HttpStatus.OK,"");
+        }catch (Exception e){
+            System.out.println(e);
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:10001")
+    @RequestMapping(value = "/updatePostLikes", method = RequestMethod.POST)
     public ResponseEntity<?> updateLikes(@RequestParam Integer pid, @RequestParam String uid){
         try {
             Optional<String> optional = postService.updatePostLikes(pid,uid);
+            return JsonResponse.generateResponse(optional.get(), HttpStatus.OK,"");
+        }catch (Exception e){
+            System.out.println(e);
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:10001")
+    @RequestMapping(value = "/updateCollects", method = RequestMethod.POST)
+    public ResponseEntity<?> updateCollects(@RequestParam Integer pid, @RequestParam String uid){
+        try {
+            Optional<String> optional = postService.updatePostCollects(pid,uid);
             return JsonResponse.generateResponse(optional.get(), HttpStatus.OK,"");
         }catch (Exception e){
             System.out.println(e);
@@ -142,5 +189,17 @@ public class PostController {
             return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
 
+    }
+
+    @CrossOrigin(origins = "http://localhost:10001")
+    @RequestMapping(value = "/deletePost", method = RequestMethod.POST)
+    public ResponseEntity<?> deletePost(@RequestParam Integer pid){
+        try {
+            Optional<String> optional = postService.deletePost(pid);
+            return JsonResponse.generateResponse(optional.get(), HttpStatus.OK,"");
+        }catch (Exception e){
+            System.out.println(e);
+            return JsonResponse.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
     }
 }

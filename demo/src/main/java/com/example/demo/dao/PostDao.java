@@ -29,7 +29,14 @@ public interface PostDao extends  SearchRepository<Post, Integer> {
     @Query(value = "SELECT new com.example.demo.dto.PostResponse(p.pid as pid ,  p.cover as cover , p.likes as likes , p.title as title , us.pic as pic , us.name as username, us.googleId as uid) FROM Post p INNER JOIN User us on p.uid=us.googleId WHERE p.uid = :uid  ORDER BY p.post_time DESC")
     public List<PostResponse> findPostCoverForPersonalPageByUid(String uid);
 
-    @Query(value = "SELECT MAX(pid) as max_id FROM post",nativeQuery = true)
+    @Query(value = "SELECT new com.example.demo.dto.PostResponse(p.pid as pid , p.cover as cover , p.likes as likes , p.title as title , us.pic as pic , us.name as username , us.googleId as uid) FROM Likes l  INNER JOIN Post p on l.pid = p.pid INNER JOIN User us on p.uid=us.googleId WHERE l.uid = :uid AND l.type = 0 ORDER BY p.post_time DESC")
+    public List<PostResponse> findPostCoverForLiked(String uid);
+
+    @Query(value = "SELECT new com.example.demo.dto.PostResponse(p.pid as pid , p.cover as cover , p.likes as likes , p.title as title , us.pic as pic , us.name as username , us.googleId as uid) FROM Collects c  INNER JOIN Post p on c.pid = p.pid INNER JOIN User us on p.uid=us.googleId WHERE c.uid = :uid  ORDER BY p.post_time DESC")
+    public List<PostResponse> findPostCoverForCollected(String uid);
+
+    @Query(value = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES\n" +
+        "WHERE table_name = 'post'",nativeQuery = true)
     public Integer findNewPid();
 
     @Modifying

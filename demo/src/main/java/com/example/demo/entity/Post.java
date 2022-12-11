@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Where;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
@@ -29,7 +30,7 @@ public class Post implements Serializable {
     private String uid;
 
     @FullTextField()
-    @NaturalId()
+    @NaturalId(mutable = true)
     @Column(name = "title")
     private String title;
 
@@ -62,7 +63,6 @@ public class Post implements Serializable {
     private double postLat;
 
 
-
     @OneToMany(targetEntity = PostFile.class , cascade = CascadeType.ALL)
     @JoinColumn(name = "pid" , referencedColumnName = "pid")
     private List<PostFile> postFiles;
@@ -70,4 +70,9 @@ public class Post implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "pid")
     private List<Comments> comments;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pid")
+    @Where(clause = " type = 0")
+    private List<Likes> likeList;
 }

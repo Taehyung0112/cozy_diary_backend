@@ -4,6 +4,7 @@ package com.example.demo.service;
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
 import com.example.demo.entity.Post;
+import com.example.demo.vo.PostUpdateVO;
 import com.example.demo.vo.PostVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,11 +20,19 @@ public interface PostService {
 
     public Optional<String> addPost(MultipartFile[] file,PostRequest postRequest);
 
+    public Optional<String> updatePost(PostUpdateVO postUpdateVO);
+
     public Optional<String> updatePostLikes(Integer pid,String uid);
+
+    public Optional<String> updatePostCollects(Integer pid,String uid);
 
     public List<PostResponse> getPostCoverByUid(String uid);
 
     public List<PostResponse> getPostCoverForPersonalPageByUid(String uid);
+
+    public List<PostResponse> getPostCoverForLiked(String uid);
+
+    public List<PostResponse> getPostCoverForCollected(String uid);
 
     public List<Post> getAllPostByIDPaging(Pageable pageable);
 
@@ -31,4 +40,5 @@ public interface PostService {
 
     public List<Post> searchPost(String text, List<String> fields, int limit);
 
+    public Optional<String> deletePost(Integer pid);
 }
